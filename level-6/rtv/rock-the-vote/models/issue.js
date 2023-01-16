@@ -5,17 +5,15 @@ const issueSchema = new Schema({
     title: {
         type: String,
         required: true
+
     },
     description: {
-        type: String
+        type: String,
     },
-    completed: {
-        type: Boolean,
-        default: false
-    },
+
     imgUrl: {
         type: String,
-        required: true
+        required: false
     },
     user: {
         type: Schema.Types.ObjectId,
@@ -23,6 +21,8 @@ const issueSchema = new Schema({
         required: true
     }
 
+
+
 })
 
-module.exprots = mongoose.model("Issue", issueSchema)
+module.exports = mongoose.model("Issue", issueSchema)

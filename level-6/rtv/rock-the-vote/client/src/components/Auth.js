@@ -20,7 +20,7 @@ export default function Auth() {
 
     function handleSignup(e) {
         e.preventDefault()
-        login(inputs)
+        signup(inputs)
     }
 
     function handleLogin(e) {
@@ -35,7 +35,7 @@ export default function Auth() {
 
     return (
         <div className="auth-container">
-            <h1>Issue App</h1>
+            <h1>Issue's of the World</h1>
             {!toggle ?
                 <>
                     <AuthForm

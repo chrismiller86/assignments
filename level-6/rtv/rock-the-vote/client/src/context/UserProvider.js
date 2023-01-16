@@ -1,10 +1,9 @@
-import React, { useState, UseState } from "react"
+import React, { useState } from "react"
 import axios from "axios"
-import user, { init } from "../../../models/user"
 
 export const UserContext = React.createContext()
 
-const userAxios = axios.create()
+export const userAxios = axios.create()
 
 userAxios.interceptors.request.use(config => {
     const token = localStorage.getItem("token")
@@ -20,7 +19,16 @@ export default function UserProvider(props) {
         errMsg: ""
     }
 
+    const initCommentState = {
+        comments: [],
+        errMsg: ""
+    }
+
+
+
     const [userState, setUserState] = useState(initState)
+    const [commentState, setCommentState] = useState(initCommentState)
+
 
     function signup(credentials) {
         axios.post("/auth/signup", credentials)
@@ -28,7 +36,7 @@ export default function UserProvider(props) {
                 const { user, token } = res.data
                 localStorage.setItem("token", token)
                 localStorage.setItem("user", JSON.stringify(user))
-                setUserState(prevState => ({
+                setUserState(prevUserState => ({
                     ...prevUserState,
                     user,
                     token
@@ -42,15 +50,15 @@ export default function UserProvider(props) {
             .then(res => {
                 const { user, token } = res.data
                 localStorage.setItem("token", token)
-                localStorage.setItem("user", user)
-                getUserIssues()
+                localStorage.setItem("user", JSON.stringify(user))
+
                 setUserState(prevUserState => ({
                     ...prevUserState,
                     user,
                     token
                 }))
             })
-            .catch(err => handleAuthErr(err.response.errMsg))
+            .catch(err => handleAuthErr(err.response.data.errMsg))
     }
 
     function logout() {
@@ -88,6 +96,22 @@ export default function UserProvider(props) {
             .catch(err => console.log(err.response.data.errMsg))
     }
 
+
+    //Get all
+    function getIssues() {
+        userAxios.get('/api/issue')
+            .then(res => {
+                setUserState(prevState => ({
+                    ...prevState,
+                    issues: res.data
+                }))
+            })
+            .catch(err => console.log(err.response.data.errMsg))
+    }
+
+
+
+    // add issue 
     function addIssue(newIssue) {
         userAxios.post("/api/issue", newIssue)
             .then(res => {
@@ -96,18 +120,62 @@ export default function UserProvider(props) {
                     issues: [...prevState.issues, res.data]
                 }))
             })
-            .catch(err => console.log(err.response.errMsg))
+            .catch(err => console.log(err.response.data.errMsg))
+    }
+
+    function deleteIssue(issueId) {
+        console.log(issueId)
+        userAxios.delete(`/api/issue/${issueId}`)
+            .then(res => {
+                setUserState(prevState => ({
+                    ...prevState,
+                    issues: prevState.issues.filter(issue => issue._id !== issueId)
+                }))
+            })
+            .catch(err => console.log(err.response.data.errMsg))
+    }
+
+    function addComment(issueId, newComment) {
+        userAxios.post(`/api/comments/${issueId}`, newComment)
+            .then(res => {
+                getIssues()
+                setCommentState(prevState => ({
+                    ...prevState,
+                    comments: [prevState.comments, res.data]
+                }))
+            })
+            .catch(err => console.log(err.response.data.errMsg))
+    }
+
+    function getComments() {
+        userAxios.get('/api/comments')
+            .then(res => {
+                setCommentState(prevCommentState => ({
+                    ...prevCommentState,
+                    comments: res.data
+                }))
+            })
+            .catch(err => console.log(err.response.data.errMsg))
     }
 
     return (
         <UserContext.Provider
             value={{
                 ...userState,
+                ...commentState,
+                userAxios,
                 signup,
                 login,
                 logout,
                 addIssue,
-                resetAuthErr
+                resetAuthErr,
+                getUserIssues,
+                getIssues,
+                deleteIssue,
+                addComment,
+                getComments
+
+
             }}
         >
             {props.children}

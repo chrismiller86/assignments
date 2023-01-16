@@ -1,20 +1,20 @@
 import React, { useState } from "react"
-import { init } from "../../../models/user"
 
 const initInputs = {
     title: "",
     description: "",
-    imgUrl: ""
+    imgUrl: "",
+    //user: {}
 }
 
-export default function IssueFomr(props) {
+export default function IssueForm(props) {
     const [inputs, setInputs] = useState(initInputs)
     const { addIssue } = props
 
     function handleChange(e) {
         const { name, value } = e.target
-        setInputs(previnputs => ({
-            ...previnputs,
+        setInputs(prevInputs => ({
+            ...prevInputs,
             [name]: value
         }))
     }
@@ -27,7 +27,7 @@ export default function IssueFomr(props) {
 
     const { title, description, imgUrl } = inputs
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <input
                 type="text"
                 name="title"
@@ -52,9 +52,4 @@ export default function IssueFomr(props) {
             <button>Add Issue</button>
         </form>
     )
-
-
-
-
-
 }
