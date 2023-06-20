@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { UserContext } from '../context/UserProvider.js'
 
 export default function CommentForm(props) {
     const { issueId, addComment } = props
@@ -23,7 +22,7 @@ export default function CommentForm(props) {
     }
 
     function handleSubmit(e) {
-        e.preventDefault()
+        // e.preventDefault()
         addComment(issueId, inputs)
         setInputs(initInputs)
     }

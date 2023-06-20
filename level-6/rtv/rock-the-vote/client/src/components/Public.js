@@ -1,10 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import IssueList from "./IssueList.js";
 import { UserContext } from '../context/UserProvider.js'
 
 export default function Public() {
 
-    const { issues } = useContext(UserContext)
+    const { issues, getIssues } = useContext(UserContext)
+
+    useEffect(() => { getIssues() }, [])
+
 
     return (
         <div className="public">

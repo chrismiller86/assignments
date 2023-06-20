@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { UserContext } from '../context/UserProvider'
+import React from 'react'
 
 
 export default function Comment(props) {
     const { description } = props
     return (
-        <div classname="comment">
+        <div className="comment">
             <p>{description}</p>
         </div>
     )

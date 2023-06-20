@@ -1,26 +1,32 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import { UserContext, userAxios } from "../context/UserProvider";
 import CommentForm from '../components/CommentForm'
 import CommentList from '../components/CommentList'
 
-
 export default function Issue(props) {
-    const { title, description, imgUrl, _id, user } = props
-    const { deleteIssue, addComment, comments } = useContext(UserContext)
+    const { title, description, imgUrl, _id, likedBy, dislikedBy} = props
+    const { deleteIssue, addComment, likeIssue, dislikeIssue} = useContext(UserContext)
+
+    const likeTotal = likedBy.length - dislikedBy.length
+
+  
+
+ const [comments, setComments] = useState([])
 
 
-    // function getCommentsByIssueId(_id) {
-    //     userAxios.get(`/api/comments/${_id}`)
-    //         .then(res => {
-    //             setComments(res.data)
-    //         })
-    //         .catch(err => console.log(err.response.data.errMsg))
-    // }
+    function getCommentsByIssueId(_id) {
+        userAxios.get(`/api/comments/${_id}`)
+            .then(res => {
+                setComments(res.data)
+            })
+            .catch(err => console.log(err.response.data.errMsg))
+    }
 
-    // useEffect(() => {
-    //     getCommentsByIssueId(_id)
-    // }, [])
+    useEffect(() => {
+        getCommentsByIssueId(_id)
+    }, [])
 
+  
     return (
         <div className="issue">
             <h1>{title}</h1>
@@ -29,10 +35,14 @@ export default function Issue(props) {
             <br />
             <button onClick={() => deleteIssue(_id)}>Delete</button>
             <br />
+            <p>Votes: {likeTotal}</p>
+           
+            <button onClick={() => likeIssue(_id)}>Like</button>
+            <button onClick={() => dislikeIssue(_id)}>Dislike</button>
+            <CommentForm addComment={addComment} issueId={_id} />
             <br />
             Comments
             <br />
-            <CommentForm addComment={addComment} issueId={_id} />
             <CommentList comments={comments} />
 
 

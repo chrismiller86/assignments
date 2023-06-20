@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useState, useCallback } from "react"
+import {useNavigate} from 'react-router-dom'
 import axios from "axios"
 
 export const UserContext = React.createContext()
@@ -19,15 +20,12 @@ export default function UserProvider(props) {
         errMsg: ""
     }
 
-    const initCommentState = {
-        comments: [],
-        errMsg: ""
-    }
-
-
-
     const [userState, setUserState] = useState(initState)
-    const [commentState, setCommentState] = useState(initCommentState)
+    const [commentState, setCommentState] = useState([])
+
+        const navigate = useNavigate()
+
+      
 
 
     function signup(credentials) {
@@ -147,16 +145,50 @@ export default function UserProvider(props) {
             .catch(err => console.log(err.response.data.errMsg))
     }
 
-    function getComments() {
-        userAxios.get('/api/comments')
+    function getComments(issueId) {
+        userAxios.get(`/api/comments/${issueId}`)
             .then(res => {
-                setCommentState(prevCommentState => ({
-                    ...prevCommentState,
-                    comments: res.data
-                }))
+                setCommentState(res.data)
             })
             .catch(err => console.log(err.response.data.errMsg))
     }
+
+
+    function likeIssue(issueId){
+        userAxios.put(`/api/issue/like/${issueId}`)
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err.response.data.errMsg))
+        navigate("/public")
+
+        navigate("/profile")
+        navigate("/public")
+      
+
+        getIssues()
+     
+
+
+    }
+
+    function dislikeIssue(issueId){
+        userAxios.put(`/api/issue/dislike/${issueId}`)
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err.response.data.errMsg))
+        navigate("/public")
+        navigate("/profile")
+        navigate("/public")
+
+
+        getIssues()
+
+        
+
+
+
+    }
+    
+
+
 
     return (
         <UserContext.Provider
@@ -173,7 +205,10 @@ export default function UserProvider(props) {
                 getIssues,
                 deleteIssue,
                 addComment,
-                getComments
+                getComments,
+                likeIssue, 
+                dislikeIssue
+               
 
 
             }}

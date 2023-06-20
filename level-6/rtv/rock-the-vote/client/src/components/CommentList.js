@@ -1,12 +1,9 @@
-import React, { useContext, useEffect } from 'react'
-import { UserContext } from '../context/UserProvider'
+import React from 'react'
 import Comment from "./Comment.js"
 
 export default function CommentList(props) {
-    const { comments } = props
-    const { getComments } = useContext(UserContext)
+    const { comments} = props
 
-    useEffect(() => { getComments() }, [])
 
 
     return (

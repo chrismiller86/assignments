@@ -77,6 +77,37 @@ issueRouter.get("/comments", (req, res, next) => {
     })
 })
 
+//like an issue
+issueRouter.put("/like/:issueId", (req, res, next) => {
+    Issue.findByIdAndUpdate(
+        {_id: req.params.issueId},
+        {$addToSet: {likedBy: req.auth._id}, $pull: {dislikedBy: req.auth._id}},
+        {new:true}
+    )
+    .exec((err, updatedIssue) => {
+        if(err){
+            res.status(500)
+            return next(err)
+        }
+        return res.status(201).send(updatedIssue)
+    })
+})
+
+//dislike an issue
+issueRouter.put("/dislike/:issueId", (req, res, next) => {
+    Issue.findByIdAndUpdate(
+        {_id: req.params.issueId},
+        {$addToSet: { dislikedBy: req.auth._id}, $pull: { likedBy: req.auth._id }},
+        {new: true}
+    )
+    .exec((err, updatedIssue) => {
+        if(err){
+            res.status(500)
+            return next(err)
+        }
+        return res.status(201).send(updatedIssue)
+    })
+})
 
 
 

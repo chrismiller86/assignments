@@ -1,7 +1,6 @@
 const express = require("express")
 const commentRouter = express.Router()
 const Comment = require("../models/comment.js")
-const User = require("../models/user.js")
 
 commentRouter.get("/", (req, res, next) => {
     Comment.find((err, comments) => {

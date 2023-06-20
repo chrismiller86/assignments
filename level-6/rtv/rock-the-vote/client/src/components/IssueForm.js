@@ -4,7 +4,6 @@ const initInputs = {
     title: "",
     description: "",
     imgUrl: "",
-    //user: {}
 }
 
 export default function IssueForm(props) {

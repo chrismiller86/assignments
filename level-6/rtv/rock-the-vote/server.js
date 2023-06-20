@@ -9,7 +9,7 @@ app.use(express.json())
 app.use(morgan('dev'))
 
 mongoose.connect(
-    `mongodb+srv://chrismillercr:Lttsfanh123!@cluster0.yprce0i.mongodb.net/?retryWrites=true&w=majority`,
+    process.env.MONGODB_URL,
     () => console.log('Connceted to the DB')
 )
 

@@ -19,7 +19,21 @@ const issueSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true
-    }
+    },
+    likedBy: [
+        {
+            type : Schema.Types.ObjectId,
+            ref : "User"
+
+        }
+
+    ],
+    dislikedBy : [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ]
 
 
 

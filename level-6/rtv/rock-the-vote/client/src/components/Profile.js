@@ -9,10 +9,13 @@ export default function Profile() {
             username
         },
         addIssue,
-        issues
+        issues,
+        getUserIssues
     } = useContext(UserContext)
 
-
+useEffect(() => {
+    getUserIssues()
+}, [])
 
     return (
         <div className="profile">
