@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useContext, useState, useEffect} from "react";
 import { UserContext, userAxios } from "../context/UserProvider";
 import CommentForm from '../components/CommentForm'
 import CommentList from '../components/CommentList'
@@ -10,8 +10,10 @@ export default function Issue(props) {
     const likeTotal = likedBy.length - dislikedBy.length
 
   
-
  const [comments, setComments] = useState([])
+
+
+
 
 
     function getCommentsByIssueId(_id) {
@@ -36,8 +38,7 @@ export default function Issue(props) {
             <button onClick={() => deleteIssue(_id)}>Delete</button>
             <br />
             <p>Votes: {likeTotal}</p>
-           
-            <button onClick={() => likeIssue(_id)}>Like</button>
+            <button onClick={() => likeIssue(_id)}>like</button>           
             <button onClick={() => dislikeIssue(_id)}>Dislike</button>
             <CommentForm addComment={addComment} issueId={_id} />
             <br />

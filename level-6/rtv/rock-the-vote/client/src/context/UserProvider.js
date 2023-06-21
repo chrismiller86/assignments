@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React, { useState} from "react"
 import {useNavigate} from 'react-router-dom'
 import axios from "axios"
 
@@ -22,6 +22,8 @@ export default function UserProvider(props) {
 
     const [userState, setUserState] = useState(initState)
     const [commentState, setCommentState] = useState([])
+    // const [refresh,setRefresh] = useState(false);
+
 
         const navigate = useNavigate()
 
@@ -153,17 +155,19 @@ export default function UserProvider(props) {
             .catch(err => console.log(err.response.data.errMsg))
     }
 
+    // function handleRefresh(){
+    //     setRefresh((prev)=>!prev)
+
+    // }
 
     function likeIssue(issueId){
         userAxios.put(`/api/issue/like/${issueId}`)
         .then(res => console.log(res.data))
         .catch(err => console.log(err.response.data.errMsg))
+        //handleRefresh()
         navigate("/public")
-
         navigate("/profile")
         navigate("/public")
-      
-
         getIssues()
      
 
@@ -177,8 +181,6 @@ export default function UserProvider(props) {
         navigate("/public")
         navigate("/profile")
         navigate("/public")
-
-
         getIssues()
 
         
